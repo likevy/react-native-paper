@@ -4,7 +4,42 @@ import { getTheme } from '../../core/theming';
 import { getDimensions, resolveColors } from '../FAB/utils';
 
 describe('resolveColors', () => {
-  it('returns theme colors for default variant (tonalPrimary)', () => {
+  it.each([false, true])(
+    'resolves every MD3 color variant (dark=%s)',
+    (dark) => {
+      const theme = getTheme(dark);
+      const variants = {
+        primary: ['primary', 'onPrimary'],
+        primaryContainer: ['primaryContainer', 'onPrimaryContainer'],
+        secondary: ['secondary', 'onSecondary'],
+        secondaryContainer: ['secondaryContainer', 'onSecondaryContainer'],
+        tertiary: ['tertiary', 'onTertiary'],
+        tertiaryContainer: ['tertiaryContainer', 'onTertiaryContainer'],
+        surface: ['surfaceContainerHigh', 'primary'],
+        branded: ['surfaceContainerHigh', 'onSurface'],
+      } as const;
+
+      const variantNames = [
+        'primary',
+        'primaryContainer',
+        'secondary',
+        'secondaryContainer',
+        'tertiary',
+        'tertiaryContainer',
+        'surface',
+        'branded',
+      ] as const;
+      for (const variant of variantNames) {
+        const [container, content] = variants[variant];
+        expect(resolveColors({ theme, variant })).toEqual({
+          container: theme.colors[container],
+          content: theme.colors[content],
+        });
+      }
+    }
+  );
+
+  it('returns theme colors for default variant (primaryContainer)', () => {
     const theme = getTheme();
     const colors = resolveColors({ theme });
     expect(colors).toEqual({
@@ -40,18 +75,18 @@ describe('resolveColors', () => {
     });
   });
 
-  it('returns theme colors for tonalSecondary variant', () => {
+  it('returns theme colors for secondaryContainer variant', () => {
     const theme = getTheme();
-    const colors = resolveColors({ theme, variant: 'tonalSecondary' });
+    const colors = resolveColors({ theme, variant: 'secondaryContainer' });
     expect(colors).toEqual({
       container: theme.colors.secondaryContainer,
       content: theme.colors.onSecondaryContainer,
     });
   });
 
-  it('returns theme colors for tonalTertiary variant', () => {
+  it('returns theme colors for tertiaryContainer variant', () => {
     const theme = getTheme();
-    const colors = resolveColors({ theme, variant: 'tonalTertiary' });
+    const colors = resolveColors({ theme, variant: 'tertiaryContainer' });
     expect(colors).toEqual({
       container: theme.colors.tertiaryContainer,
       content: theme.colors.onTertiaryContainer,
