@@ -139,7 +139,7 @@ exports[`renders FAB large size 1`] = `
       }
       accessible={true}
       collapsable={false}
-      focusable={true}
+      focusable={false}
       onBlur={[Function]}
       onClick={[Function]}
       onFocus={[Function]}
@@ -380,7 +380,7 @@ exports[`renders FAB medium size 1`] = `
       }
       accessible={true}
       collapsable={false}
-      focusable={true}
+      focusable={false}
       onBlur={[Function]}
       onClick={[Function]}
       onFocus={[Function]}
@@ -620,9 +620,9 @@ exports[`renders FAB transitioning to not visible 1`] = `
           "text": undefined,
         }
       }
-      accessible={true}
+      accessible={false}
       collapsable={false}
-      focusable={true}
+      focusable={false}
       onBlur={[Function]}
       onClick={[Function]}
       onFocus={[Function]}
@@ -644,6 +644,7 @@ exports[`renders FAB transitioning to not visible 1`] = `
           ],
         ]
       }
+      tabIndex={-1}
       testID="floating-action-button"
     >
       <View
@@ -863,7 +864,7 @@ exports[`renders FAB transitioning to visible 1`] = `
       }
       accessible={true}
       collapsable={false}
-      focusable={true}
+      focusable={false}
       onBlur={[Function]}
       onClick={[Function]}
       onFocus={[Function]}
@@ -1105,7 +1106,7 @@ exports[`renders FAB with aria-label 1`] = `
       }
       accessible={true}
       collapsable={false}
-      focusable={true}
+      focusable={false}
       onBlur={[Function]}
       onClick={[Function]}
       onFocus={[Function]}
@@ -1346,7 +1347,7 @@ exports[`renders FAB with containerColor and contentColor overrides 1`] = `
       }
       accessible={true}
       collapsable={false}
-      focusable={true}
+      focusable={false}
       onBlur={[Function]}
       onClick={[Function]}
       onFocus={[Function]}
@@ -1587,7 +1588,7 @@ exports[`renders FAB with containerColor override 1`] = `
       }
       accessible={true}
       collapsable={false}
-      focusable={true}
+      focusable={false}
       onBlur={[Function]}
       onClick={[Function]}
       onFocus={[Function]}
@@ -1828,7 +1829,7 @@ exports[`renders FAB with default props 1`] = `
       }
       accessible={true}
       collapsable={false}
-      focusable={true}
+      focusable={false}
       onBlur={[Function]}
       onClick={[Function]}
       onFocus={[Function]}
@@ -2069,7 +2070,7 @@ exports[`renders FAB with primary variant 1`] = `
       }
       accessible={true}
       collapsable={false}
-      focusable={true}
+      focusable={false}
       onBlur={[Function]}
       onClick={[Function]}
       onFocus={[Function]}
@@ -2310,7 +2311,7 @@ exports[`renders FAB with secondary variant 1`] = `
       }
       accessible={true}
       collapsable={false}
-      focusable={true}
+      focusable={false}
       onBlur={[Function]}
       onClick={[Function]}
       onFocus={[Function]}
@@ -2551,7 +2552,7 @@ exports[`renders FAB with secondaryContainer variant 1`] = `
       }
       accessible={true}
       collapsable={false}
-      focusable={true}
+      focusable={false}
       onBlur={[Function]}
       onClick={[Function]}
       onFocus={[Function]}
@@ -2792,7 +2793,7 @@ exports[`renders FAB with tertiary variant 1`] = `
       }
       accessible={true}
       collapsable={false}
-      focusable={true}
+      focusable={false}
       onBlur={[Function]}
       onClick={[Function]}
       onFocus={[Function]}
@@ -3033,7 +3034,7 @@ exports[`renders FAB with tertiaryContainer variant 1`] = `
       }
       accessible={true}
       collapsable={false}
-      focusable={true}
+      focusable={false}
       onBlur={[Function]}
       onClick={[Function]}
       onFocus={[Function]}

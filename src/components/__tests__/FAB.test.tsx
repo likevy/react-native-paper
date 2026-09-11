@@ -10,7 +10,6 @@ import {
   shadow,
 } from '../../theme/tokens/sys/elevation';
 import FAB from '../FAB';
-import Shell from '../FAB/Shell';
 
 afterEach(() => {
   jest.restoreAllMocks();
@@ -150,20 +149,12 @@ it.each(['icon', 'extended'] as const)(
   }
 );
 
-it('keeps an explicit shell elevation of zero on hover', async () => {
-  jest.replaceProperty(Platform, 'OS', 'web');
-  await render(<Shell icon="plus" onPress={() => {}} elevation={0} />);
-  await fireEvent(screen.getByTestId('fab-shell'), 'hoverIn');
-  const [flatShadow] = shadow(0, getTheme().colors.shadow);
-  expect(screen.getByTestId('fab-shell-container')).toHaveStyle(flatShadow);
-});
-
 it('does not enable a FAB without an action when adding interaction handlers', async () => {
   await render(<FAB icon="plus" aria-label="Create" />);
   expect(screen.getByRole('button', { name: 'Create' })).toBeDisabled();
 });
 
-it('hides an invisible FAB from accessibility and disables its action', async () => {
+it('hides an invisible FAB from accessibility and keyboard navigation without marking it disabled', async () => {
   const onPress = jest.fn();
   await render(
     <FAB icon="plus" aria-label="Create" onPress={onPress} visible={false} />
@@ -172,7 +163,10 @@ it('hides an invisible FAB from accessibility and disables its action', async ()
   const fab = screen.getByTestId('floating-action-button', {
     includeHiddenElements: true,
   });
-  expect(fab).toBeDisabled();
+  expect(fab).not.toBeDisabled();
+  expect(fab).toHaveProp('accessible', false);
+  expect(fab).toHaveProp('focusable', false);
+  expect(fab).toHaveProp('tabIndex', -1);
   await userEvent.press(fab);
   expect(onPress).not.toHaveBeenCalled();
 });
@@ -190,7 +184,7 @@ it('clears interaction elevation when a FAB is hidden and shown again', async ()
   );
 });
 
-it('keeps the menu trigger at its existing elevation on web', async () => {
+it('uses the shared FAB hover elevation for the menu trigger', async () => {
   jest.replaceProperty(Platform, 'OS', 'web');
   await render(
     <FAB.Menu
@@ -204,22 +198,40 @@ it('keeps the menu trigger at its existing elevation on web', async () => {
     />
   );
   await fireEvent(screen.getByTestId('fab-shell'), 'hoverIn');
-  const [restingShadow] = shadow(3, getTheme().colors.shadow);
-  expect(screen.getByTestId('fab-shell-container')).toHaveStyle(restingShadow);
+  const [hoverShadow] = shadow(4, getTheme().colors.shadow);
+  expect(screen.getByTestId('fab-shell-container')).toHaveStyle(hoverShadow);
 });
 
 it.each(['ios', 'android'] as const)(
-  'keeps native elevation unchanged on hover on %s',
+  'applies hover elevation alongside focus and restores it after press on %s',
   async (platform) => {
     jest.replaceProperty(Platform, 'OS', platform);
     await render(<FAB icon="plus" onPress={() => {}} />);
-    await fireEvent(screen.getByTestId('floating-action-button'), 'hoverIn');
+    const fab = screen.getByTestId('floating-action-button');
+    const container = screen.getByTestId('floating-action-button-container');
     const [restingShadow] = shadow(3, getTheme().colors.shadow);
-    expect(screen.getByTestId('floating-action-button-container')).toHaveStyle(
+    const [hoverShadow] = shadow(4, getTheme().colors.shadow);
+    const restingStyle =
       platform === 'android'
         ? { elevation: androidElevationLevels[3] }
-        : restingShadow
-    );
+        : restingShadow;
+    const hoverStyle =
+      platform === 'android'
+        ? { elevation: androidElevationLevels[4] }
+        : hoverShadow;
+
+    await fireEvent(fab, 'focus', { nativeEvent: {} });
+    expect(container).toHaveStyle(restingStyle);
+    await fireEvent(fab, 'hoverIn');
+    expect(container).toHaveStyle(hoverStyle);
+    await fireEvent(fab, 'focus', { nativeEvent: {} });
+    expect(container).toHaveStyle(hoverStyle);
+    await fireEvent(fab, 'pressIn');
+    expect(container).toHaveStyle(restingStyle);
+    await fireEvent(fab, 'pressOut');
+    expect(container).toHaveStyle(hoverStyle);
+    await fireEvent(fab, 'hoverOut');
+    expect(container).toHaveStyle(restingStyle);
   }
 );
 
